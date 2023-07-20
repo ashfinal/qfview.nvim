@@ -38,14 +38,14 @@ function M.qftextfunc(info)
     local linenr = nil
     if items[idx].lnum == items[idx].end_lnum then
       linenr = string.format(
-        "%d:%d-%d",
+        '%d:%d-%d',
         items[idx].lnum,
         items[idx].col,
         items[idx].end_col
       )
     else
       linenr = string.format(
-        "%d-%d:%d%d",
+        '%d-%d:%d%d',
         items[idx].lnum,
         items[idx].end_lnum,
         items[idx].col,
@@ -57,7 +57,7 @@ function M.qftextfunc(info)
   end
 
   local path_matrix = vim.tbl_map(function(path)
-    return vim.split(path, "/")
+    return vim.split(path, '/')
   end, paths)
 
   local min_size = vim.fn.min(vim.tbl_map(function(path)
@@ -69,7 +69,7 @@ function M.qftextfunc(info)
 
   -- The first common_prefix is always "/", which acctually is not common
   if vim.tbl_count(common_prefix) > 1 then
-    local prefix_str = table.concat(common_prefix, "/")
+    local prefix_str = table.concat(common_prefix, '/')
     stripped_paths = vim.tbl_map(function(path)
       -- Don't forget to add 1 for the trailing slash
       return string.sub(
@@ -99,7 +99,7 @@ function M.qftextfunc(info)
   local l = {}
   for idx = 1, #texts do
     local line = string.format(
-      "%-" .. path_maxw .. "s" .. "|%-" .. linenr_maxw .. "s|%s",
+      '%-' .. path_maxw .. 's' .. '|%-' .. linenr_maxw .. 's|%s',
       stripped_paths[idx],
       linenrs[idx],
       texts[idx]
@@ -110,7 +110,7 @@ function M.qftextfunc(info)
 end
 
 function M.setup(options)
-  vim.api.nvim_set_option("quickfixtextfunc", "v:lua.require'qfview'.qftextfunc")
+  vim.api.nvim_set_option('quickfixtextfunc', "v:lua.require'qfview'.qftextfunc")
 end
 
 
