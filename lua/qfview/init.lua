@@ -34,6 +34,9 @@ end
 function M.qftextfunc(info)
   local qflist = vim.fn.getqflist({ id = info.id, items = true, qfbufnr = true })
   local items = qflist.items
+  -- There are :colder :cnewer commands which reuse the same qf buffer
+  -- We need to remove all related signs before adding new ones
+  vim.fn.sign_unplace('qfviewSignGroup', { buffer = qflist.qfbufnr })
   -- Collect the information of each item
   local types = {}
   local paths = {}
