@@ -1,5 +1,14 @@
 local M = {}
 
+-- Change diagnostic symbols in the sign column (gutter)
+-- https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-diagnostic-symbols-in-the-sign-column-gutter
+local signs = {
+  E = 'DiagnosticSignError',
+  W = 'DiagnosticSignWarn',
+  I = 'DiagnosticSignInfo',
+  N = 'DiagnosticSignHint',
+}
+
 local function get_common_prefix(matrix, shortest)
   local prefix = {}
   local idx = 1
@@ -23,7 +32,8 @@ local function get_common_prefix(matrix, shortest)
 end
 
 function M.qftextfunc(info)
-  local items = vim.fn.getqflist({ id = info.id, items = 1 }).items
+  local qflist = vim.fn.getqflist({ id = info.id, items = true, qfbufnr = true })
+  local items = qflist.items
   -- Collect the information of each item
   local types = {}
   local paths = {}
@@ -105,7 +115,18 @@ function M.qftextfunc(info)
       texts[idx]
     )
     table.insert(l, line)
+
+    if types[idx] ~= '' then
+      vim.fn.sign_place(
+        0,
+        'qfviewSignGroup',
+        signs[types[idx]],
+        qflist.qfbufnr,
+        { lnum = idx, priority = 10 }
+      )
+    end
   end
+
   return l
 end
 
