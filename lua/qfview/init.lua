@@ -32,7 +32,12 @@ local function get_common_prefix(matrix, shortest)
 end
 
 function M.qftextfunc(info)
-  local qflist = vim.fn.getqflist({ id = info.id, items = true, qfbufnr = true })
+  local qflist = nil
+  if info.quickfix == 1 then
+    qflist = vim.fn.getqflist({ id = info.id, items = true, qfbufnr = true })
+  else
+    qflist = vim.fn.getloclist(info.winid, { id = info.id, items = true, qfbufnr = true })
+  end
   local items = qflist.items
   -- There are :colder :cnewer commands which reuse the same qf buffer
   -- We need to remove all related signs before adding new ones
