@@ -97,10 +97,8 @@ function M.qftextfunc(info)
       )
     end, paths)
   else
-    -- No common prefix, use the shorten paths to minimize the display width
-    stripped_paths = vim.tbl_map(function(path)
-      return vim.fn.pathshorten(path, 1)
-    end, paths)
+    -- No common prefix, just use the original paths
+    stripped_paths = paths
   end
 
   local path_maxw = vim.fn.max(vim.tbl_map(
