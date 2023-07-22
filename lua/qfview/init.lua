@@ -32,17 +32,60 @@ local function get_common_prefix(matrix, shortest)
   return prefix
 end
 
+function M.foldexprfunc()
+  local line = vim.split(vim.fn.getline(vim.v.lnum), '|')[1]
+  local next_line = vim.split(vim.fn.getline(vim.v.lnum + 1), '|')[1]
+  if line == next_line then
+    return '1'
+  else
+    return '<1'
+  end
+end
+
+function M.foldtextfunc()
+  local line = vim.fn.getline(vim.v.foldstart)
+  local splitted = vim.split(line, '|')
+  local sub = splitted[1] .. '|' .. splitted[2] .. '|'
+  local count = vim.v.foldend - vim.v.foldstart + 1
+  return sub .. '  +-  ' .. count .. ' lines'
+end
+
 function M.qftextfunc(info)
   local qflist = nil
   if info.quickfix == 1 then
-    qflist = vim.fn.getqflist({ id = info.id, items = true, qfbufnr = true })
+    qflist = vim.fn.getqflist({
+      id = info.id,
+      items = true,
+      qfbufnr = true,
+      winid = true,
+    })
   else
-    qflist = vim.fn.getloclist(info.winid, { id = info.id, items = true, qfbufnr = true })
+    qflist = vim.fn.getloclist(
+      info.winid,
+      { id = info.id, items = true, qfbufnr = true, winid = true, }
+    )
   end
-  local items = qflist.items
+
+  -- Fold related configurations for qfwindow
+  local qfwinid = qflist.winid
+  vim.api.nvim_win_set_option(qfwinid, 'foldmethod', 'expr')
+  vim.api.nvim_win_set_option(qfwinid, 'fillchars', 'eob: ,fold: ')
+  vim.api.nvim_win_set_option(
+    qfwinid,
+    'foldexpr',
+    "v:lua.require'qfview'.foldexprfunc()"
+  )
+  vim.api.nvim_win_set_option(
+    qfwinid,
+    'foldtext',
+    "v:lua.require'qfview'.foldtextfunc()"
+  )
+
   -- There are :colder :cnewer commands which reuse the same qf buffer
   -- We need to remove all related signs before adding new ones
   vim.fn.sign_unplace('qfviewSignGroup', { buffer = qflist.qfbufnr })
+
+  local items = qflist.items
   -- Collect the information of each item
   local types = {}
   local paths = {}
