@@ -7,6 +7,7 @@ local signs = {
   W = 'DiagnosticSignWarn',
   I = 'DiagnosticSignInfo',
   N = 'DiagnosticSignHint',
+  [''] = 'DiagnosticSignInfo', -- :helpgrep type
 }
 
 local function get_common_prefix(matrix, shortest)
