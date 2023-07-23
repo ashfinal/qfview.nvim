@@ -1,6 +1,6 @@
-# Pretty quickfix/location view for Neovim
+# Pretty quickfix/location view with consistent path-shorten and folding
 
-qfview.nvim makes your quickfix/location window look nicer and function better.
+qfview.nvim makes your quickfix/location window look nicer and function better. Meant to be the successor of [nvim-pqf](https://github.com/yorickpeterse/nvim-pqf).
 
 ![qfview](./images/qfview.png)
 
