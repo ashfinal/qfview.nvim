@@ -91,8 +91,7 @@ function M.qftextfunc(info)
   local paths = {}
   local linenrs = {}
   local texts = {}
-  -- We always update the whole qf list
-  for idx = 1, #items do
+  for idx = info.start_idx, info.end_idx do
     local type = items[idx].type
     table.insert(types, type)
     local bufname = vim.api.nvim_buf_get_name(items[idx].bufnr)
@@ -157,7 +156,7 @@ function M.qftextfunc(info)
 
   -- Finally, we can construct the lines
   local l = {}
-  for idx = 1, #texts do
+  for idx = info.start_idx, info.end_idx do
     local line = string.format(
       '%-' .. path_maxw .. 's' .. '|%-' .. linenr_maxw .. 's|%s',
       stripped_paths[idx],
