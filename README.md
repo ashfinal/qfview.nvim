@@ -1,4 +1,4 @@
-# Pretty quickfix/location view with consistent path-shorten and folding
+# Pretty quickfix/location view with smart path-shorten and folding
 
 qfview.nvim makes your quickfix/location window look nicer and function better. Meant to be the successor of [nvim-pqf](https://github.com/yorickpeterse/nvim-pqf).
 
@@ -6,11 +6,10 @@ qfview.nvim makes your quickfix/location window look nicer and function better. 
 
 ## Features
 
-- Works with both quickfix and location window
-- Consistent, aligned, shorter text display
+- Consistent, aligned, shorten text display
 - Highlights for the item type (error, warning, etc)
 - Same file based folding
-- Should play well with other plugins
+- Works with both quickfix and location window
 
 qfview.nvim uses Neovim's built-in diagnostic signs to highlight the item type. You can change your diagnostic symbols following [this instruction](https://github.com/neovim/nvim-lspconfig/wiki/UI-Customization#change-diagnostic-symbols-in-the-sign-column-gutter).
 
