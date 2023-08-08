@@ -157,8 +157,9 @@ function M.qftextfunc(info)
   -- Finally, we can construct the lines
   local l = {}
   for idx = info.start_idx, info.end_idx do
-    local line = string.format(
-      '%-' .. math.min(path_maxw, 99) .. 's' .. '|%-' .. math.min(linenr_maxw, 99) .. 's|%s',
+    local fmt = '%-' .. path_maxw .. 's|%' .. linenr_maxw .. 's|%s'
+    local line = vim.fn.printf(
+      fmt,
       stripped_paths[idx],
       linenrs[idx],
       texts[idx]
