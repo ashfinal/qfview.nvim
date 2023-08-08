@@ -158,7 +158,7 @@ function M.qftextfunc(info)
   local l = {}
   for idx = info.start_idx, info.end_idx do
     local line = string.format(
-      '%-' .. path_maxw .. 's' .. '|%-' .. linenr_maxw .. 's|%s',
+      '%-' .. math.min(path_maxw, 99) .. 's' .. '|%-' .. math.min(linenr_maxw, 99) .. 's|%s',
       stripped_paths[idx],
       linenrs[idx],
       texts[idx]
@@ -182,6 +182,5 @@ end
 function M.setup(options)
   vim.api.nvim_set_option('quickfixtextfunc', "v:lua.require'qfview'.qftextfunc")
 end
-
 
 return M
