@@ -19,7 +19,7 @@ Recent Neovim.
 
 ## Installation
 
-Install this plugin using your plugin manager of choice. For example, when using vim-plug:
+Install this plugin using your plugin manager of choice. For example, when using [vim-plug](https://github.com/junegunn/vim-plug):
 
     Plug 'ashfinal/qfview.nvim'
 
@@ -27,6 +27,16 @@ Then add the following lua snippet to your `init.lua`:
 
 ```lua
 require('qfview').setup()
+```
+
+When using [lazy.nvim](https://github.com/folke/lazy.nvim):
+
+```lua
+{
+  "ashfinal/qfview.nvim",
+  event = "UIEnter",
+  config = true,
+},
 ```
 
 ## Configuration
