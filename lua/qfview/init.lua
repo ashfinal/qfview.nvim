@@ -14,7 +14,7 @@ local function get_common_prefix(matrix, shortest)
   local prefix = {}
   local idx = 1
   while true do
-    local c = matrix[1][idx]
+    local c = (matrix[1] or {})[idx]
     if c == nil then
       break
     end
@@ -166,15 +166,17 @@ function M.qftextfunc(info)
     )
     table.insert(l, line)
 
-    if types[idx] ~= '' then
-      vim.fn.sign_place(
-        0,
-        'qfviewSignGroup',
-        signs[types[idx]],
-        qflist.qfbufnr,
-        { lnum = idx, priority = 10 }
-      )
-    end
+    if types[idx] == '' then goto done end
+    if type(signs[types[idx]]) ~= 'string' then goto done end
+    if signs[types[idx]] == '' then goto done end
+    vim.fn.sign_place(
+      0,
+      'qfviewSignGroup',
+      signs[types[idx]],
+      qflist.qfbufnr,
+      { lnum = idx, priority = 10 }
+    )
+    ::done::
   end
 
   return l
