@@ -10,26 +10,26 @@ local signs = {
   [''] = 'DiagnosticSignInfo', -- :helpgrep type
 }
 
-local function get_common_prefix(matrix, shortest)
-  local prefix = {}
-  local idx = 1
-  while true do
-    local c = (matrix[1] or {})[idx]
-    if c == nil then
-      break
-    end
-    for i = 2, #matrix do
-      if matrix[i][idx] ~= c then
-        return prefix
+-- return common components from an array of file path
+---@param paths string[]
+local function get_common_components(paths)
+  local first = paths[1]
+  if not first then return {} end
+  local components = vim.split(first, "/")
+  for _, path in ipairs(paths) do
+    local other_components = vim.split(path, "/")
+    for i, v in ipairs(components) do
+      if i > #other_components or v ~= other_components[i] then
+        -- Removes elements from i(inclusive) until the end
+        ---@diagnostic disable-next-line: unused-local
+        for j = #components, i, -1 do
+          table.remove(components)
+        end
+        break
       end
     end
-    table.insert(prefix, c)
-    idx = idx + 1
-    if idx > shortest then
-      break
-    end
   end
-  return prefix
+  return components
 end
 
 function M.foldexprfunc()
@@ -117,20 +117,12 @@ function M.qftextfunc(info)
     table.insert(texts, items[idx].text)
   end
 
-  local path_matrix = vim.tbl_map(function(path)
-    return vim.split(path, '/')
-  end, paths)
-
-  local min_size = vim.fn.min(vim.tbl_map(function(path)
-    return #path
-  end, path_matrix))
-
-  local common_prefix = get_common_prefix(path_matrix, min_size)
+  local common_components = get_common_components(paths)
   local stripped_paths = nil
 
-  -- The first common_prefix is always "/", which acctually is not common
-  if vim.tbl_count(common_prefix) > 1 then
-    local prefix_str = table.concat(common_prefix, '/')
+  -- The first common_component is always "/", which acctually is not common
+  if vim.tbl_count(common_components) > 1 then
+    local prefix_str = table.concat(common_components, '/')
     stripped_paths = vim.tbl_map(function(path)
       -- Don't forget to add 1 for the trailing slash
       return string.sub(
