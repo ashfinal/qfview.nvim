@@ -174,6 +174,7 @@ function M.qftextfunc(info)
   return l
 end
 
+---@diagnostic disable-next-line: unused-local
 function M.setup(options)
   vim.api.nvim_set_option('quickfixtextfunc', "v:lua.require'qfview'.qftextfunc")
 end
